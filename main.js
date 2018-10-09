@@ -1,3 +1,8 @@
+/**
+ * The line below is necessary for this script to detect if a later version is available
+ * <TTAP_VERSION>1.0.0</TTAP_VERSION>
+ */
+
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, globalShortcut} = require('electron')
 
@@ -9,6 +14,7 @@ app.commandLine.appendSwitch('disable-web-security');
 let mainWindow;
 
 function createWindow () {
+  checkForNewerVersion();
 
   globalShortcut.register('CommandOrControl+Shift+i', () => {
     // Open the DevTools.
@@ -66,3 +72,14 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+function checkForNewerVersion() {
+    const {net} = require('electron')
+    const request = net.request('https://raw.githubusercontent.com/wongjiahau/ttap-desktop-client/master/main.js')
+    request.on('response', (response) => {
+      response.on('data', (chunk) => {
+        console.log(chunk.toString().match(/<TTAP_VERSION>.*<\/TTAP_VERSION>/));
+      })
+    })
+    request.end()
+}
