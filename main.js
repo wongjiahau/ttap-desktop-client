@@ -28,7 +28,9 @@ function createWindow () {
   // Set to maximum size on startup
   mainWindow.maximize();
 
-  mainWindow.loadURL("http://localhost:3000")
+  const DEVELOPING = false;
+  mainWindow.loadURL(DEVELOPING ? "http://localhost:3000" : "https://ttap.surge.sh");
+  mainWindow.webContents.reloadIgnoringCache();
   // mainWindow.loadFile("./index.html")
 
   // Emitted when the window is closed.
