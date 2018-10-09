@@ -1,17 +1,22 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 
+// disable web security, so that iframe can be accessed
+app.commandLine.appendSwitch('disable-web-security'); 
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({webPreferences: {
+    webSecurity: false,
+    nativeWindowOpen: true
+  }});
 
-  // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
-
+  mainWindow.loadURL("http://localhost:3000")
+  // mainWindow.loadFile("./index.html")
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
