@@ -1,7 +1,7 @@
 const CURRENT_VERSION = "<TTAP_VERSION>1.0.0</TTAP_VERSION>";
 
 // Modules to control application life and create native browser window
-const {app, dialog, BrowserWindow, globalShortcut} = require('electron')
+const {app, dialog, BrowserWindow, globalShortcut, webFrame} = require('electron')
 
 // disable web security, so that iframe can be accessed
 app.commandLine.appendSwitch('disable-web-security'); 
@@ -12,16 +12,32 @@ let mainWindow;
 
 function createWindow () {
 
-  globalShortcut.register('CommandOrControl+Shift+i', () => {
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools()
-  })
-
   // Create the browser window.
   mainWindow = new BrowserWindow({webPreferences: {
     webSecurity: false,
     nativeWindowOpen: true
   }});
+
+  globalShortcut.register('CommandOrControl+Shift+i', () => {
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools()
+  })
+
+  globalShortcut.register('CommandOrControl+=', () => {
+    // Zoom in
+    mainWindow.webContents.getZoomLevel((currentZoomLevel) => {
+      mainWindow.webContents.setZoomLevel(currentZoomLevel + 1);
+    });
+  })
+
+  globalShortcut.register('CommandOrControl+-', () => {
+    // Zoom out
+    mainWindow.webContents.getZoomLevel((currentZoomLevel) => {
+      mainWindow.webContents.setZoomLevel(currentZoomLevel - 1);
+    });
+  })
+
+
 
   checkForNewerVersion(() => {
     dialog.showMessageBox(mainWindow, {
