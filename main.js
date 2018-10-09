@@ -1,7 +1,7 @@
 const CURRENT_VERSION = "<TTAP_VERSION>1.0.0</TTAP_VERSION>";
 
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, globalShortcut} = require('electron')
+const {app, dialog, BrowserWindow, globalShortcut} = require('electron')
 
 // disable web security, so that iframe can be accessed
 app.commandLine.appendSwitch('disable-web-security'); 
@@ -23,7 +23,23 @@ function createWindow () {
     nativeWindowOpen: true
   }});
 
-  checkForNewerVersion(mainWindow);
+  checkForNewerVersion(() => {
+    dialog.showMessageBox(mainWindow, {
+        message: "There is a newer version available, do you want to download it now?",
+        buttons: ["Nope", "Download now"]
+      },
+      (response) => {
+        if(response === 1) { // Means user clicked "Download now"
+          const {shell} = require('electron');
+          fetch("https://raw.githubusercontent.com/wongjiahau/ttap-desktop-client/master/DOWNLOAD_URL.txt",
+          (response) => {
+            shell.openExternal(response.toString())
+          })
+        }
+        console.log(response);
+      }
+    )
+  });
 
 
   // Turn of menu
@@ -71,17 +87,24 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-function checkForNewerVersion(mainWindow) {
-    const {net} = require('electron')
-    const request = net.request('https://raw.githubusercontent.com/wongjiahau/ttap-desktop-client/master/main.js')
-    request.on('response', (response) => {
-      response.on('data', (chunk) => {
-        const newVersion = chunk.toString().match(/<TTAP_VERSION>(.+)<\/TTAP_VERSION>/)
-                        [0].split(">")[1].split("<")[0];
-        if(CURRENT_VERSION !== newVersion)  {
-          mainWindow.
-        }
-      })
+function checkForNewerVersion(callback) {
+  fetch('https://raw.githubusercontent.com/wongjiahau/ttap-desktop-client/master/main.js', (response) => {
+    const newVersion = response.toString().match(/<TTAP_VERSION>(.+)<\/TTAP_VERSION>/)[0];
+    console.log(CURRENT_VERSION);
+    console.log(newVersion);
+    if(CURRENT_VERSION !== newVersion)  {
+      callback();
+    }
+  })
+}
+
+function fetch(url, callback) {
+  const {net} = require('electron')
+  const request = net.request(url);
+  request.on('response', (response) => {
+    response.on('data', (chunk) => {
+      callback(chunk);
     })
-    request.end()
+  })
+  request.end()
 }
