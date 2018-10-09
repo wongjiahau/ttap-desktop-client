@@ -1,3 +1,11 @@
+## How to package into binary?
+
+```sh
+electron-builder --win
+electron-builder --mac
+electron-builder --linux
+```
+
 # electron-quick-start
 
 **Clone and run for a quick way to see Electron in action.**
