@@ -1,9 +1,9 @@
 ## How to package into binary?
 
 ```sh
-electron-builder --win
-electron-builder --mac
-electron-builder --linux
+npm run dist-win
+npm run dist-mac
+npm run dist-linux
 ```
 
 # electron-quick-start
