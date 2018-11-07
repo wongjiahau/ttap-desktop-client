@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, shell} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -7,11 +7,27 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow()
+  mainWindow = new BrowserWindow({
+    webPreferences: {
+      webSecurity: false, // To enable CORS
+  }});
+  redirectLinkToSystemBrowser(mainWindow.webContents);
+  
   mainWindow.maximize()
 
   // and load the index.html of the app.
   mainWindow.loadURL('https://ttap.surge.sh')
+  //mainWindow.loadURL('http://localhost:3000')
+
+  mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
+    item.once('done', (event, state) => {
+      if (state === 'completed') {
+        shell.openItem(item.getSavePath());
+      } else {
+        console.log(`Download failed: ${state}`)
+      }
+    })
+  })
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -49,3 +65,14 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+function redirectLinkToSystemBrowser(webContents) {
+  var handleRedirect = (e, url) => {
+    if(url != webContents.getURL()) {
+      e.preventDefault()
+      require('electron').shell.openExternal(url)
+    }
+  }
+  webContents.on('will-navigate', handleRedirect)
+  webContents.on('new-window', handleRedirect)
+}
