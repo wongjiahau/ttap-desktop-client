@@ -9,6 +9,9 @@ app.on(
   }
 );
 
+// Refer https://github.com/electron/electron/issues/18214#issuecomment-495043193
+app.commandLine.appendSwitch("disable-site-isolation-trials");
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -25,13 +28,13 @@ function createWindow() {
   mainWindow.maximize();
 
   // and load the index.html of the app.
-  const DESKTOP_CLIENT_VERSION = 20220313;
+  const DESKTOP_CLIENT_VERSION = 2;
   mainWindow.loadURL(
     `https://ttap.surge.sh?desktop-client-version=${DESKTOP_CLIENT_VERSION}`
   );
-  // mainWindow.loadURL(
-  //   `http://localhost:3000?desktop-client-version=${DESKTOP_CLIENT_VERSION}`
-  // );
+  mainWindow.loadURL(
+    `http://localhost:3000?desktop-client-version=${DESKTOP_CLIENT_VERSION}`
+  );
 
   // mainWindow.webContents.openDevTools();
 
