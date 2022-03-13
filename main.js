@@ -25,8 +25,13 @@ function createWindow() {
   mainWindow.maximize();
 
   // and load the index.html of the app.
-  // mainWindow.loadURL('https://ttap.surge.sh')
-  mainWindow.loadURL("http://localhost:3000");
+  const DESKTOP_CLIENT_VERSION = 20220313;
+  mainWindow.loadURL(
+    `https://ttap.surge.sh?desktop-client-version=${DESKTOP_CLIENT_VERSION}`
+  );
+  // mainWindow.loadURL(
+  //   `http://localhost:3000?desktop-client-version=${DESKTOP_CLIENT_VERSION}`
+  // );
 
   // mainWindow.webContents.openDevTools();
 
