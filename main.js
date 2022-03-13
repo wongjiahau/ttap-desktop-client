@@ -32,9 +32,9 @@ function createWindow() {
   mainWindow.loadURL(
     `https://ttap.surge.sh?desktop-client-version=${DESKTOP_CLIENT_VERSION}`
   );
-  mainWindow.loadURL(
-    `http://localhost:3000?desktop-client-version=${DESKTOP_CLIENT_VERSION}`
-  );
+  // mainWindow.loadURL(
+  //   `http://localhost:3000?desktop-client-version=${DESKTOP_CLIENT_VERSION}`
+  // );
 
   // mainWindow.webContents.openDevTools();
 
