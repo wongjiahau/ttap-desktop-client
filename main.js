@@ -43,7 +43,8 @@ function createWindow() {
     (event, item, webContents) => {
       item.once("done", (event, state) => {
         if (state === "completed") {
-          shell.openItem(item.getSavePath());
+          // Refer https://github.com/aterenin/right-click-external-app/issues/2
+          shell.openPath(item.getSavePath());
         } else {
           console.log(`Download failed: ${state}`);
         }
