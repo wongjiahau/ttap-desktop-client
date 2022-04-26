@@ -1,11 +1,12 @@
 {
   "name": "TTAP",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A program to help UTAR students to arrange timetable without hassle.",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder -mwl"
+    "compile": "tsc",
+    "start": "npm run compile && electron .",
+    "build": "npm run compile && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder -mwl"
   },
   "repository": "https://github.com/wongjiahau/ttap-desktop-client",
   "keywords": [
@@ -19,6 +20,7 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^11.5.0",
-    "electron-builder": "^22.14.13"
+    "electron-builder": "^22.14.13",
+    "typescript": "^4.6.3"
   }
 }
