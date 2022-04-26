@@ -27,8 +27,13 @@ function createWindow() {
 
   mainWindow.maximize();
 
+  // To make `setTitle` works.
+  // Refer https://github.com/electron/electron/issues/1594#issuecomment-419741626
+  mainWindow.on("page-title-updated", (event) => event.preventDefault());
+
   // and load the index.html of the app.
-  const DESKTOP_CLIENT_VERSION = 2;
+  const DESKTOP_CLIENT_VERSION = app.getVersion();
+  mainWindow.setTitle(`TTAP Desktop Client v${DESKTOP_CLIENT_VERSION}`);
   mainWindow.loadURL(
     `https://ttap.surge.sh?desktop-client-version=${DESKTOP_CLIENT_VERSION}`
   );
